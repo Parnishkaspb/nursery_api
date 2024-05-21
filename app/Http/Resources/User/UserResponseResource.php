@@ -19,7 +19,9 @@ class UserResponseResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             "telephone" => $this->telephone,
-            "login" => $this->login
+            'email' => $this->email,
+            "login" => $this->login,
+            "password" => $this->password,
         ];
     }
 }

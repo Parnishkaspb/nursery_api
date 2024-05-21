@@ -26,8 +26,10 @@ Route::prefix('user')->group(function () {
     Route::group(['middleware' => ['auth:users']], function () {
         Route::controller(UserController::class)->group(function () {
             Route::post('/logout', 'logout');
-            // Route::get('/update', 'edit');
-            // Route::patch('/update', 'update');
+            Route::get('/update', 'edit');
+            Route::patch('/update', 'update');
+
+            Route::patch('/updatepassword', 'update_password');
         });
     });
 });
