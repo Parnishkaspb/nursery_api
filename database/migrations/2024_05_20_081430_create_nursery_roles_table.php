@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->rememberToken();
             $table->timestamps();
 
-
             $table->foreign('id_role')->references('id')->on('nursery_roles')->onDelete('cascade');
         });
     }

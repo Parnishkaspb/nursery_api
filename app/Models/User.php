@@ -60,6 +60,10 @@ class User extends Authenticatable
         }
     }
 
+    public function workWithMoneys()
+    {
+        return $this->hasMany(WorkWithMoney::class, 'id_user');
+    }
 
     public function moneys()
     {
