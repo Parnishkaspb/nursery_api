@@ -1,21 +1,8 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{UserController, UserMoneyController, NurseryWorkerController, NurseryRoleController, PlantController, ReasonController, WorkWithMoneyController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
 
 Route::prefix('user')->group(function () {
     Route::controller(UserController::class)->group(function () {
@@ -28,45 +15,62 @@ Route::prefix('user')->group(function () {
             Route::post('/logout', 'logout');
             Route::get('/update', 'edit');
             Route::patch('/update', 'update');
-
             Route::patch('/updatepassword', 'update_password');
+        });
+
+
+        Route::controller(UserMoneyController::class)->group(function () {
+            Route::get('/investitions', 'all');
+            Route::get('/investitions/{id}', 'show');
+            // Route::patch('/investitions', 'edit');
+            Route::post('/investitions', 'store');
+            Route::delete('/investitions/{id}', 'destroy');
         });
     });
 });
 
 
-// Route::prefix('worker')->group(function () {
-//     Route::post('/login', [MedicController::class, 'login']);
-//     Route::group(['middleware' => ['auth:medic']], function () {
-//         Route::controller(MedicController::class)->group(function () {
-//             Route::post('/register', 'store');
-//             Route::post('/logout', 'logout');
-//             Route::get('/update', 'edit');
-//             Route::patch('/update/{medic}', 'update');
-//         });
+Route::prefix('worker')->group(function () {
+    Route::post('/login', [NurseryWorkerController::class, 'login']);
+    // Route::post('/register', [NurseryWorkerController::class, 'store']);
 
-//         Route::controller(MyVisitController::class)->group(function () {
-//             Route::get('/visits', 'medic_index');
-//             Route::get('/visits/{id_visit}', 'medic_index_id');
-//             Route::patch('/visit/{visit}', 'people_came');
+    Route::group(['middleware' => ['auth:workers']], function () {
+        Route::controller(NurseryWorkerController::class)->group(function () {
+            Route::post('/register', 'store');
+            Route::post('/logout', 'logout');
+            Route::get('/update', 'edit');
+            Route::patch('/update_personal/{id_personal}', 'update_personal');
+            Route::get('/update', 'update');
+        });
 
-//         });
+        Route::controller(NurseryRoleController::class)->group(function () {
+            Route::get('/roles', 'index');
+            Route::post('/roles', 'store');
+            Route::patch('/roles/{id}', 'update');
+            Route::delete('/roles/{id}', 'destroy');
+        });
 
-//         Route::controller(MyRecomendationController::class)->group(function () {
-//             Route::post('/recomendation', 'store');
-//             Route::patch('/recomendation/{recomendation}', 'update');
+        Route::controller(PlantController::class)->group(function () {
+            Route::get('/plant', 'index');
+            Route::get('/plant/{id}', 'show');
+            Route::post('/plant', 'store');
+            Route::patch('/plant/{id}', 'update');
+            Route::delete('/plant/{id}', 'destroy');
+        });
 
-//             // TO DO
-//             // Route::post('/recomendation/{recomendation}', 'delete');
-//         });
+        Route::controller(ReasonController::class)->group(function () {
+            Route::get('/reason', 'index');
+            Route::get('/reason/{id}', 'show');
+            Route::post('/reason', 'store');
+            Route::patch('/reason/{id}', 'update');
+            Route::delete('/reason/{id}', 'destroy');
+        });
 
-//         Route::controller(ProfileAmbulanceController::class)->group(function () {
-//             Route::get('/specialization', 'index');
-//             Route::post('/specialization', 'store');
-//             Route::patch('/specialization/{specialization}', 'update');
-
-//             // TO DO
-//             // Route::post('/specialization/{specialization}', 'delete');
-//         });
-//     });
-// });
+        Route::controller(WorkWithMoneyController::class)->group(function () {
+            Route::get('/investition', 'invest_index');
+            Route::get('/workmoney', 'index');
+            Route::get('/workmoney/{id}', 'show');
+            Route::post('/workmoney', 'store');
+        });
+    });
+});
